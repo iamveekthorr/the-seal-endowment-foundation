@@ -1,0 +1,288 @@
+@import 'tailwindcss';
+
+/*
+ * Three-tier responsive design matching the mockup's actual cutoffs: base
+ * = <=640 (mobile), tablet: = 641-979 (tablet), desktop: = >=980 (desktop).
+ *
+ * `tablet:` is a custom variant with an explicit upper bound
+ * (min-width: 641px) AND (max-width: 979px) rather than Tailwind's built-in
+ * `sm:` (a plain, unbounded min-width: 640px query). That bound is load
+ * bearing: Tailwind v4 does not reliably emit generated @media blocks in
+ * ascending min-width order for a mix of built-in and custom breakpoints —
+ * we observed `desktop:` (min-width: 980px) emitted BEFORE `sm:`
+ * (min-width: 40rem) in the compiled CSS, so at desktop widths both
+ * queries matched and the later-in-file `sm:` rule won the cascade,
+ * freezing text at the tablet size (confirmed via computed-style checks:
+ * h1 stayed 34px past 980px instead of switching to 46px). Renaming the
+ * override-prone built-in breakpoint (`md` -> `desktop`) alone did not fix
+ * this, because the problem is the OVERLAP between two unbounded
+ * min-width queries, not which one is custom. Giving the tablet tier a
+ * closed range means only one of {base, tablet, desktop} ever matches at
+ * a given width, so emission order can no longer matter.
+ */
+@custom-variant tablet {
+  @media (min-width: 641px) and (max-width: 979px) {
+    @slot;
+  }
+}
+
+/*
+ * `tablet-up:` is the unbounded companion to `tablet:` above (min-width:
+ * 641px, no ceiling) — use it for a property that should simply carry from
+ * the tablet tier through desktop with no separate `desktop:` value of its
+ * own (e.g. switching a panel from stacked to side-by-side). It's safe
+ * specifically BECAUSE nothing else touches that property at desktop: the
+ * cascade-order bug above only bites when two rules for the SAME property
+ * both match at the same width. Reach for bounded `tablet:` instead
+ * whenever a `desktop:` override for that same property exists.
+ */
+@custom-variant tablet-up {
+  @media (min-width: 641px) {
+    @slot;
+  }
+}
+
+/*
+ * Design tokens — the "Industry" design system as narrowed for SEF by
+ * STYLE-GUIDE.md. Every value below is copied from that file's token tables;
+ * do not hand-pick a nearby shade instead of reading the guide again.
+ */
+@theme {
+  --breakpoint-desktop: 980px;
+
+  /* Two families only: Barlow Condensed for headings, numerals, dates,
+     refs and kickers; Barlow for body copy, forms, nav, buttons, tables. */
+  --font-display: var(--font-barlow-condensed), 'Arial Narrow', sans-serif;
+  --font-body: var(--font-barlow), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Paper ground + text */
+  --color-bg: #f2f2f3;
+  --color-surface: #e9e9ea;
+  --color-text: #1d1f20;
+  --color-divider: rgb(29 31 32 / 16%);
+
+  /* Neutral ramp — text and rules */
+  --color-neutral-300: #d4d4d7;
+  --color-neutral-700: #5d5d60;
+  --color-neutral-800: #424244;
+  --color-neutral-900: #2b2b2d;
+
+  /* Accent + ramp */
+  --color-accent: #5980a6;
+  --color-accent-100: #eef6ff;
+  --color-accent-300: #b5d9fd;
+  --color-accent-400: #94bce3;
+  --color-accent-500: #749dc4;
+  --color-accent-600: #597ea3;
+  --color-accent-700: #416180;
+  --color-accent-900: #1d2d3d;
+}
+
+/*
+ * Bare element selectors must live in Tailwind's `base` layer. Cascade
+ * layers rank ABOVE specificity: an unlayered rule beats every rule inside
+ * any @layer no matter how specific the selector, and `@utility` output
+ * (like `.btn-primary`, `.btn-secondary`, `.link-arrow`) lands in the
+ * `utilities` layer. A plain `a { color }` written outside `@layer` was
+ * silently winning over `.btn-primary`'s `color: var(--color-bg)` on every
+ * anchor-tag button, making button labels the same colour as their own
+ * background (invisible white-on-accent, and accent-on-transparent instead
+ * of the intended dark text on btn-secondary). Keep all of this inside
+ * `@layer base` so utilities can always override it.
+ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--color-accent);
+  }
+  a:hover {
+    color: var(--color-accent-600);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* ---- Small helpers for patterns Tailwind utilities don't express cleanly ---- */
+
+/* Eyebrow / kicker: STYLE-GUIDE.md §3 — 11px Barlow uppercase, .18–.20em. */
+@utility eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+/* Section-header "see more" links (STYLE-GUIDE.md §5 / mockup `.lnk`
+   pattern): 13px, plain accent (not the accent-700 used for eyebrows). */
+@utility link-arrow {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-accent);
+  white-space: nowrap;
+  transition: color 140ms ease;
+  &::after {
+    content: '\2192';
+    margin-left: 6px;
+  }
+  &:hover {
+    color: var(--color-accent-600);
+  }
+}
+
+/*
+ * Blueprint frame (STYLE-GUIDE.md §5): a 1px hairline border, square
+ * corners, transparent background. Applied to primary content cards,
+ * framed photographs, form panels, event cards and stat plates.
+ *
+ * The mockup also decorates these with four registration-mark corner
+ * ticks (`<i class="corner tl|tr|bl|br">`), but their actual visual style
+ * lives in an external stylesheet that was never exported alongside the
+ * mockup file and isn't recoverable from what's in the project — see
+ * BlueprintCorners.tsx. Until that's available, the plain hairline box
+ * below stands on its own with no corner-tick utility.
+ */
+@utility blueprint {
+  position: relative;
+  border: 1px solid var(--color-divider);
+  background: transparent;
+  border-radius: 0;
+}
+
+/*
+ * Buttons (STYLE-GUIDE.md §5). Square corners, no shadow. btn-primary is
+ * the only solid object on a page (Donate, form submit); btn-secondary is
+ * the outlined alternative; btn-ghost is an inline text action with an
+ * arrow suffix; btn-block stretches to fill its container.
+ */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 21px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+@utility btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+  &:hover {
+    background: var(--color-accent-600);
+    border-color: var(--color-accent-600);
+  }
+}
+
+@utility btn-secondary {
+  background: transparent;
+  border-color: var(--color-text);
+  color: var(--color-text);
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-700);
+  }
+}
+
+@utility btn-ghost {
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-accent-700);
+  &:hover {
+    color: var(--color-accent-600);
+    text-decoration: underline;
+  }
+}
+
+@utility btn-block {
+  width: 100%;
+  justify-content: center;
+}
+
+/*
+ * Tags (STYLE-GUIDE.md §5). tag-accent for the active filter / "Ongoing"
+ * status; tag-neutral for "Completed"; tag-outline for inactive filters
+ * and unselected amount chips.
+ */
+@utility tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12.5px;
+  padding: 8px 15px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+@utility tag-accent {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+@utility tag-neutral {
+  background: var(--color-surface);
+  border-color: var(--color-divider);
+  color: var(--color-neutral-800);
+}
+
+@utility tag-outline {
+  background: transparent;
+  border-color: var(--color-divider);
+  color: var(--color-neutral-800);
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-700);
+  }
+}
+
+/* Photographs: desaturated and washed into the accent — STYLE-GUIDE.md §6.
+   No full-colour photographs anywhere. */
+@utility duotone {
+  filter: grayscale(1) contrast(1.05);
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent-900);
+    mix-blend-mode: color;
+    opacity: 0.55;
+  }
+}

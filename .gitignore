@@ -1,0 +1,34 @@
+# --- Dependencies -----------------------------------------------------------
+node_modules/
+.pnp/
+.pnp.js
+
+# --- Env files (secrets — never commit) --------------------------------------
+# Covers web/.env, studio/.env, and any .env.local/.env.production etc.
+# anywhere in the repo, while still tracking the checked-in *.example files.
+.env
+.env.*
+!.env.example
+!*.env.example
+
+# --- Next.js (web/) -----------------------------------------------------------
+web/.next/
+web/out/
+web/build/
+web/next-env.d.ts
+web/*.tsbuildinfo
+
+# --- Sanity Studio (studio/) --------------------------------------------------
+studio/dist/
+studio/.sanity/
+
+# --- Logs ---------------------------------------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Editor / OS ---------------------------------------------------------------
+.DS_Store
+.vscode/
+.idea/
