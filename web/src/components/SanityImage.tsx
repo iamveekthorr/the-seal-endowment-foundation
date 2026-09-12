@@ -4,10 +4,13 @@ import { urlFor } from '@/sanity/lib/image'
 export type SanityImageValue = {
   asset?: {
     _id: string
-    url: string
+    // `url`, and everything under `metadata`, are Sanity's own computed
+    // fields on the asset document (not ones our schema defines), so they're
+    // outside typegen's `--enforce-required-fields` and stay optional here.
+    url?: string
     metadata?: {
       lqip?: string
-      dimensions?: { width: number; height: number }
+      dimensions?: { width?: number; height?: number }
     }
   }
   alt?: string

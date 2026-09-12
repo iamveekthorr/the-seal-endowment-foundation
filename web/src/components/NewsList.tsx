@@ -16,9 +16,10 @@ const PAGE_SIZE = 4
  * (mockup 1h's "Older stories" button). */
 export function NewsList({ items }: { items: NewsListItem[] }) {
   const [visible, setVisible] = useState(PAGE_SIZE)
-  if (!items.length) return <p className="text-sm text-neutral-700">No news yet — check back soon.</p>
+  const lead = items[0]
+  if (!lead) return <p className="text-sm text-neutral-700">No news yet — check back soon.</p>
 
-  const [lead, ...rest] = items
+  const rest = items.slice(1)
   const shown = rest.slice(0, visible)
 
   return (
