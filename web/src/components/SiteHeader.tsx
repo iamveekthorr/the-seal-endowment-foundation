@@ -25,13 +25,16 @@ export function SiteHeader({
   const isActive = (href: string) =>
     href !== '/' && (pathname === href || pathname?.startsWith(`${href}/`))
   const links = navLinks?.length
-    ? navLinks
+    ? navLinks.some((link) => link.href === '/support')
+      ? navLinks
+      : [...navLinks, ]
     : [
         { _key: 'about', label: 'About', href: '/about' },
         { _key: 'programmes', label: 'Programmes', href: '/programmes' },
         { _key: 'impact', label: 'Projects & Impact', href: '/projects-impact' },
         { _key: 'news', label: 'News & Events', href: '/news-events' },
         { _key: 'leadership', label: 'Leadership', href: '/leadership' },
+        // { _key: 'support', label: 'Support the Endowment', href: '/support' },
         { _key: 'contact', label: 'Contact', href: '/contact' },
       ]
 
@@ -76,8 +79,8 @@ export function SiteHeader({
               )
             })}
           </div>
-          <Link href="/donate" aria-current={isActive('/donate') ? 'page' : undefined} className="btn btn-primary">
-            Donate
+          <Link href="/support" aria-current={isActive('/support') ? 'page' : undefined} className="btn btn-primary">
+           Support the Endowment
           </Link>
           <button
             type="button"

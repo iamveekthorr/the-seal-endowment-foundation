@@ -78,7 +78,7 @@ Tokens, create two tokens:
 
 ```bash
 cd web
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Fill in:

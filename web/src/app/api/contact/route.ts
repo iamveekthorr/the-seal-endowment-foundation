@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeClient } from '@/sanity/lib/writeClient'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const TOPICS = new Set(['general', 'membership', 'scholarships', 'partnership'])
+const TOPICS = new Set(['general', 'membership', 'scholarships', 'partnership', 'education', 'healthcare', 'culture', 'livelihoods', 'community'])
 
 export async function POST(request: NextRequest) {
-  let body: { name?: unknown; email?: unknown; phone?: unknown; topic?: unknown; message?: unknown }
+  let body: { name?: unknown; email?: unknown; phone?: unknown; topic?: unknown; supportType?: unknown; message?: unknown; suggestions?: unknown; comments?: unknown; requests?: unknown }
   try {
     body = await request.json()
   } catch {
@@ -16,7 +16,12 @@ export async function POST(request: NextRequest) {
   const email = typeof body.email === 'string' ? body.email.trim() : ''
   const phone = typeof body.phone === 'string' ? body.phone.trim() : undefined
   const topic = typeof body.topic === 'string' && TOPICS.has(body.topic) ? body.topic : 'general'
-  const message = typeof body.message === 'string' ? body.message.trim() : ''
+  const supportType = typeof body.supportType === 'string' ? body.supportType.trim() : undefined
+  const message = typeof body.message === 'string' ? body.message.trim() : [
+    typeof body.suggestions === 'string' ? `Suggestions: ${body.suggestions.trim()}` : '',
+    typeof body.comments === 'string' ? `Comments: ${body.comments.trim()}` : '',
+    typeof body.requests === 'string' ? `Requests: ${body.requests.trim()}` : '',
+  ].filter(Boolean).join('\n\n')
 
   if (!email || !EMAIL_RE.test(email)) {
     return NextResponse.json({ error: 'Enter a valid email address.' }, { status: 400 })
@@ -32,6 +37,7 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       topic,
+      supportType,
       message,
       status: 'new',
       submittedAt: new Date().toISOString(),
