@@ -41,7 +41,10 @@ export function Hero({
           )}
           <div className="flex flex-col gap-2.5 tablet-up:flex-row tablet-up:flex-wrap">
             {primaryCta?.label && (
-              <a href={primaryCta.href || '/donate'} className="btn btn-primary w-full tablet-up:w-auto">
+              <a
+                href={primaryCta.label.toLowerCase().includes('support') ? '/support' : primaryCta.href || '/support'}
+                className="btn btn-primary w-full tablet-up:w-auto"
+              >
                 {primaryCta.label}
               </a>
             )}
