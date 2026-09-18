@@ -35,7 +35,7 @@ export function SupportForm() {
     e.preventDefault()
     setStatus('submitting')
     setError(null)
-
+   
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
