@@ -392,8 +392,35 @@
             {
               "type": "string",
               "value": "partnership"
+            },
+            {
+              "type": "string",
+              "value": "education"
+            },
+            {
+              "type": "string",
+              "value": "healthcare"
+            },
+            {
+              "type": "string",
+              "value": "culture"
+            },
+            {
+              "type": "string",
+              "value": "livelihoods"
+            },
+            {
+              "type": "string",
+              "value": "community"
             }
           ]
+        },
+        "optional": true
+      },
+      "supportType": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
         },
         "optional": true
       },
@@ -1671,6 +1698,14 @@
         "value": {
           "type": "string"
         }
+      },
+      "logo": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "creditedImage"
+        },
+        "optional": true
       },
       "siteName": {
         "type": "objectAttribute",
