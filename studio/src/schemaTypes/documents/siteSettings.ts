@@ -14,6 +14,13 @@ export const siteSettings = defineType({
   ],
   fields: [
     defineField({
+      name: 'logo',
+      title: 'Logo',
+      type: 'creditedImage',
+      group: 'brand',
+      description: "The Foundation's official logo mark, shown in the site header. Falls back to the initials badge below if left empty.",
+    }),
+    defineField({
       name: 'siteName',
       title: 'Site name',
       type: 'string',
@@ -30,10 +37,11 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'logoInitials',
-      title: 'Logo mark initials',
+      title: 'Logo mark initials (fallback)',
       type: 'string',
       group: 'brand',
       initialValue: 'SEF',
+      description: 'Shown in a small badge only when no Logo image is set above.',
       validation: (rule) => rule.max(4),
     }),
     defineField({

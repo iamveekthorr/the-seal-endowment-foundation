@@ -20,6 +20,7 @@ export default async function ProgrammesPage() {
         siteName={siteSettings?.siteName}
         siteNameSub={siteSettings?.siteNameSub}
         logoInitials={siteSettings?.logoInitials}
+        logo={siteSettings?.logo}
         navLinks={siteSettings?.navLinks}
       />
 

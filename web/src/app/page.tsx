@@ -40,6 +40,7 @@ export default async function HomePage() {
         siteName={siteSettings?.siteName}
         siteNameSub={siteSettings?.siteNameSub}
         logoInitials={siteSettings?.logoInitials}
+        logo={siteSettings?.logo}
         navLinks={siteSettings?.navLinks}
       />
 

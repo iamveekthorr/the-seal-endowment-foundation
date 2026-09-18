@@ -1,20 +1,24 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { urlFor } from '@/sanity/lib/image'
+import type { SanityImageValue } from './SanityImage'
 
 export type NavLink = { _key: string; label: string; href: string }
 
 export function SiteHeader({
-  siteName,
   siteNameSub,
   logoInitials,
+  logo,
   navLinks,
 }: {
   siteName?: string
   siteNameSub?: string
   logoInitials?: string
+  logo?: SanityImageValue
   navLinks?: NavLink[]
 }) {
   const [open, setOpen] = useState(false)
@@ -25,16 +29,13 @@ export function SiteHeader({
   const isActive = (href: string) =>
     href !== '/' && (pathname === href || pathname?.startsWith(`${href}/`))
   const links = navLinks?.length
-    ? navLinks.some((link) => link.href === '/support')
-      ? navLinks
-      : [...navLinks, ]
+    ? navLinks
     : [
         { _key: 'about', label: 'About', href: '/about' },
         { _key: 'programmes', label: 'Programmes', href: '/programmes' },
         { _key: 'impact', label: 'Projects & Impact', href: '/projects-impact' },
         { _key: 'news', label: 'News & Events', href: '/news-events' },
         { _key: 'leadership', label: 'Leadership', href: '/leadership' },
-        // { _key: 'support', label: 'Support the Endowment', href: '/support' },
         { _key: 'contact', label: 'Contact', href: '/contact' },
       ]
 
@@ -43,19 +44,29 @@ export function SiteHeader({
     <header className="border-b border-divider bg-bg">
       <div className="mx-auto flex max-w-[1280px] items-center gap-6 px-4.5 py-3 tablet:px-6 desktop:px-10 desktop:py-3.5">
         <Link href="/" className="mr-auto flex items-center gap-2.5">
-          <span
-            className="blueprint flex h-[30px] w-[30px] shrink-0 items-center justify-center tablet-up:h-[34px] tablet-up:w-[34px]"
-            style={{ borderColor: 'var(--color-accent)' }}
-          >
-            <span className="font-display text-xs tracking-[0.06em] text-accent">{logoInitials || 'SEF'}</span>
-          </span>
-          <span className="leading-[1.05]">
-            <span className="block font-display text-base tracking-[0.02em] tablet-up:text-[19px]">
-              {siteName || 'THE SEALS'}
+          {/* Official logo — the mark already spells out "The SEALS", so the
+              text lockup alongside it only needs the org's full-name
+              qualifier, not a second "THE SEALS" line. Falls back to the
+              initials badge if no logo is set in Site Settings. */}
+          {logo?.asset ? (
+            <Image
+              src={urlFor(logo).width(200).auto('format').url()}
+              alt={logo.alt || 'The Seals Endowment Foundation'}
+              width={logo.asset.metadata?.dimensions?.width || 396}
+              height={logo.asset.metadata?.dimensions?.height || 400}
+              priority
+              className="h-9 w-auto shrink-0 tablet-up:h-11"
+            />
+          ) : (
+            <span
+              className="blueprint flex h-[30px] w-[30px] shrink-0 items-center justify-center tablet-up:h-[34px] tablet-up:w-[34px]"
+              style={{ borderColor: 'var(--color-accent)' }}
+            >
+              <span className="font-display text-xs tracking-[0.06em] text-accent">{logoInitials || 'SEF'}</span>
             </span>
-            <span className="block text-[8px] tracking-[0.18em] text-neutral-700 uppercase tablet-up:text-[9.5px] tablet-up:tracking-[0.22em]">
-              {siteNameSub || 'Endowment Foundation'}
-            </span>
+          )}
+          <span className="text-[8px] tracking-[0.18em] text-neutral-700 uppercase tablet-up:text-[9.5px] tablet-up:tracking-[0.22em]">
+            {siteNameSub || 'Endowment Foundation'}
           </span>
         </Link>
 
@@ -79,8 +90,8 @@ export function SiteHeader({
               )
             })}
           </div>
-          <Link href="/support" aria-current={isActive('/support') ? 'page' : undefined} className="btn btn-primary">
-           Support the Endowment
+          <Link href="/donate" aria-current={isActive('/donate') ? 'page' : undefined} className="btn btn-primary">
+            Donate
           </Link>
           <button
             type="button"

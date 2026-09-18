@@ -41,6 +41,7 @@ export default async function LeadershipPage() {
         siteName={siteSettings?.siteName}
         siteNameSub={siteSettings?.siteNameSub}
         logoInitials={siteSettings?.logoInitials}
+        logo={siteSettings?.logo}
         navLinks={siteSettings?.navLinks}
       />
 

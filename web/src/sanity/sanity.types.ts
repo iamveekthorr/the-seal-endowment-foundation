@@ -85,7 +85,17 @@ export type Enquiry = {
   name?: string;
   email: string;
   phone?: string;
-  topic?: "general" | "membership" | "scholarships" | "partnership";
+  topic?:
+    | "general"
+    | "membership"
+    | "scholarships"
+    | "partnership"
+    | "education"
+    | "healthcare"
+    | "culture"
+    | "livelihoods"
+    | "community";
+  supportType?: string;
   message?: string;
   status?: "new" | "actioned";
   submittedAt?: string;
@@ -303,6 +313,7 @@ export type SiteSettings = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  logo?: CreditedImage;
   siteName: string;
   siteNameSub?: string;
   logoInitials?: string;
@@ -591,9 +602,10 @@ export type HOME_PAGE_QUERY_RESULT =
 
 // Source: ../web/src/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_id == "siteSettings"][0]{    siteName,    siteNameSub,    logoInitials,    navLinks[]{ _key, label, href },    footerTagline,    footerColumns[]{      _key,      heading,      links[]{ _key, label, href }    },    legalName,    contactAddress,    contactEmail,    contactPhone  }
+// Query: *[_id == "siteSettings"][0]{    logo {  asset->{    _id,    url,    metadata { lqip, dimensions { width, height } }  },  alt,  credit,  hotspot,  crop},    siteName,    siteNameSub,    logoInitials,    navLinks[]{ _key, label, href },    footerTagline,    footerColumns[]{      _key,      heading,      links[]{ _key, label, href }    },    legalName,    contactAddress,    contactEmail,    contactPhone  }
 export type SITE_SETTINGS_QUERY_RESULT =
   | {
+      logo: null;
       siteName: null;
       siteNameSub: null;
       logoInitials: null;
@@ -606,6 +618,23 @@ export type SITE_SETTINGS_QUERY_RESULT =
       contactPhone: null;
     }
   | {
+      logo: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: {
+              width: number;
+              height: number;
+            } | null;
+          } | null;
+        } | null;
+        alt: string;
+        credit: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      } | null;
       siteName: string;
       siteNameSub: string | null;
       logoInitials: string | null;
@@ -1133,7 +1162,7 @@ export type CONTACT_PAGE_QUERY_RESULT =
 declare global {
   interface SanityQueries {
     '\n  *[_id == "homePage"][0]{\n    hero{\n      eyebrow,\n      heading,\n      body,\n      image {\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions { width, height } }\n  },\n  alt,\n  credit,\n  hotspot,\n  crop\n},\n      primaryCta { label, href },\n      secondaryCta { label, href }\n    },\n    visionEyebrow,\n    visionStatement,\n    missionEyebrow,\n    missionStatement,\n    missionNote,\n    missionCta { label, href },\n    focusAreas[]{ _key, title, description },\n    stats[]{ _key, value, label }\n  }\n': HOME_PAGE_QUERY_RESULT;
-    '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    siteNameSub,\n    logoInitials,\n    navLinks[]{ _key, label, href },\n    footerTagline,\n    footerColumns[]{\n      _key,\n      heading,\n      links[]{ _key, label, href }\n    },\n    legalName,\n    contactAddress,\n    contactEmail,\n    contactPhone\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_id == "siteSettings"][0]{\n    logo {\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions { width, height } }\n  },\n  alt,\n  credit,\n  hotspot,\n  crop\n},\n    siteName,\n    siteNameSub,\n    logoInitials,\n    navLinks[]{ _key, label, href },\n    footerTagline,\n    footerColumns[]{\n      _key,\n      heading,\n      links[]{ _key, label, href }\n    },\n    legalName,\n    contactAddress,\n    contactEmail,\n    contactPhone\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_id == "donateSettings"][0]{\n    heading,\n    body,\n    note,\n    currency,\n    suggestedAmounts\n  }\n': DONATE_SETTINGS_QUERY_RESULT;
     '\n  *[_type == "programme" && featuredOnHome == true] | order(order asc) [0...3]{\n    _id,\n    title,\n    category,\n    description,\n    image {\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions { width, height } }\n  },\n  alt,\n  credit,\n  hotspot,\n  crop\n}\n  }\n': FEATURED_PROGRAMMES_QUERY_RESULT;
     '\n  *[_type == "newsItem"] | order(publishedAt desc) [0...3]{\n    _id,\n    title,\n    publishedAt,\n    excerpt\n  }\n': LATEST_NEWS_QUERY_RESULT;

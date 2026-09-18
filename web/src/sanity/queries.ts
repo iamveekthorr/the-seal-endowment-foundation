@@ -40,6 +40,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
 
 export const SITE_SETTINGS_QUERY = defineQuery(/* groq */ `
   *[_id == "siteSettings"][0]{
+    logo ${IMAGE_PROJECTION},
     siteName,
     siteNameSub,
     logoInitials,

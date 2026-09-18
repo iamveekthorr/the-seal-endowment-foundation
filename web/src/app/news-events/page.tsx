@@ -30,6 +30,7 @@ export default async function NewsEventsPage() {
         siteName={siteSettings?.siteName}
         siteNameSub={siteSettings?.siteNameSub}
         logoInitials={siteSettings?.logoInitials}
+        logo={siteSettings?.logo}
         navLinks={siteSettings?.navLinks}
       />
 
