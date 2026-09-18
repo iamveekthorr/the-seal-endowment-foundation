@@ -90,8 +90,8 @@ export function SiteHeader({
               )
             })}
           </div>
-          <Link href="/donate" aria-current={isActive('/donate') ? 'page' : undefined} className="btn btn-primary">
-            Donate
+    <Link href="/support" aria-current={isActive('/support') ? 'page' : undefined} className="btn btn-primary">
+           Support the Endowment
           </Link>
           <button
             type="button"
