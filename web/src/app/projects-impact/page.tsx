@@ -32,6 +32,7 @@ export default async function ProjectsImpactPage() {
         siteName={siteSettings?.siteName}
         siteNameSub={siteSettings?.siteNameSub}
         logoInitials={siteSettings?.logoInitials}
+        logo={siteSettings?.logo}
         navLinks={siteSettings?.navLinks}
       />
 
