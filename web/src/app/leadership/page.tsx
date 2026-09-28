@@ -15,7 +15,7 @@ function PersonGrid({ people }: { people: PersonItem[] }) {
       {people.map((person) => (
         <div key={person._id}>
           <div className="blueprint relative h-[180px] overflow-hidden bg-surface tablet-up:h-[230px]">
-            <SanityImage image={person.photo} sizes="(min-width: 980px) 25vw, (min-width: 640px) 33vw, 50vw" className="duotone object-cover" />
+            <SanityImage image={person.photo} sizes="(min-width: 980px) 25vw, (min-width: 640px) 33vw, 50vw" className="duotone object-contain" />
           </div>
           <h4 className="mt-3.5 mb-0.5 font-display text-base font-semibold">{person.name}</h4>
           <div className="text-[12.5px] text-neutral-700">{person.role}</div>
