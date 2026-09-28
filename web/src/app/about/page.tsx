@@ -30,7 +30,7 @@ export default async function AboutPage() {
 
       {aboutPage?.storyImage?.asset && (
         <div className="relative h-[180px] border-b border-divider tablet-up:h-[260px]">
-          <SanityImage image={aboutPage.storyImage} sizes="100vw" className="duotone object-cover" />
+          <SanityImage image={aboutPage.storyImage} sizes="100vw" className=" object-cover" />
         </div>
       )}
 

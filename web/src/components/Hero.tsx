@@ -25,7 +25,7 @@ export function Hero({
     // same content flowing normally underneath it, not overlapping.
     <section className="tablet-up:relative">
       <div className="relative h-[230px] tablet-up:absolute tablet-up:inset-0 tablet-up:h-[620px]">
-        <SanityImage image={image} sizes="100vw" priority className="duotone object-cover" />
+        <SanityImage image={image} sizes="100vw" priority className=" object-cover" />
         <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-b from-accent-900/0 from-40% to-accent-900/55 tablet-up:block" />
       </div>
 
