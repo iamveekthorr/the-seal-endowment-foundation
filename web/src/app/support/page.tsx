@@ -12,6 +12,7 @@ export default async function SupportPage() {
   return (
     <>
       <SiteHeader siteName={siteSettings?.siteName} siteNameSub={siteSettings?.siteNameSub} logoInitials={siteSettings?.logoInitials} navLinks={siteSettings?.navLinks} />
+     
       <main className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-4.5 py-10 tablet:px-6 desktop:grid-cols-[0.85fr_1.15fr] desktop:gap-14 desktop:px-10 desktop:py-14">
         <div>
           <p className="eyebrow mb-3">Support the Endowment</p>
