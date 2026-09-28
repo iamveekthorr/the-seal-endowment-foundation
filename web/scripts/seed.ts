@@ -178,15 +178,15 @@ async function seedSingletons(client: SanityClient) {
   })
 
   console.log('Writing donateSettings…')
-  await client.createOrReplace({
-    _id: 'donateSettings',
-    _type: 'donateSettings',
-    heading: 'Give to the endowment',
-    body: 'Your support funds scholarships, healthcare outreach and community projects across Ika land and the diaspora.',
-    note: 'Bank transfer, card and diaspora giving supported.',
-    currency: 'NGN',
-    suggestedAmounts: [10000, 50000, 250000],
-  })
+  // await client.createOrReplace({
+  //   _id: 'donateSettings',
+  //   _type: 'donateSettings',
+  //   heading: 'Give to the endowment',
+  //   body: 'Your support funds scholarships, healthcare outreach and community projects across Ika land and the diaspora.',
+  //   note: 'Bank transfer, card and diaspora giving supported.',
+  //   currency: 'NGN',
+  //   suggestedAmounts: [10000, 50000, 250000],
+  // })
 
   return { scholarshipImage, medicalImage, cultureImage }
 }
