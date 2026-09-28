@@ -50,7 +50,7 @@ export function ProgrammesGrid({ items }: { items: ProgrammeItem[] }) {
               <SanityImage
                 image={programme.image}
                 sizes="(min-width: 980px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="duotone object-cover"
+                className=" object-cover"
               />
             </div>
             {programme.category && (

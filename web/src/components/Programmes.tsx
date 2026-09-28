@@ -32,7 +32,7 @@ export function Programmes({ items }: { items?: Programme[] }) {
                 <SanityImage
                   image={programme.image}
                   sizes="(min-width: 980px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="duotone object-cover"
+                  className=" object-cover"
                 />
                 {programme.image?.credit && (
                   <span className="absolute right-2.5 bottom-2 bg-accent-900/70 px-[7px] py-[3px] font-body text-[10px] tracking-[0.05em] text-bg">

@@ -45,7 +45,7 @@ export default async function ProjectsImpactPage() {
           {featuredProjects.map((project) => (
             <div key={project._id}>
               <div className="blueprint relative h-[240px] overflow-hidden bg-surface">
-                <SanityImage image={project.image} sizes="(min-width: 641px) 50vw, 100vw" className="duotone object-cover" />
+                <SanityImage image={project.image} sizes="(min-width: 641px) 50vw, 100vw" className=" object-cover" />
               </div>
               <p className="eyebrow mt-4.5">
                 {project.ref} · {project.location} · {project.year}
