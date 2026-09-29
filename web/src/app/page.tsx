@@ -69,13 +69,13 @@ export default async function HomePage() {
 
       <NewsEvents news={news} events={events} />
 
-      <DonatePanel
+      {/* <DonatePanel
         heading={donateSettings?.heading}
         body={donateSettings?.body}
         note={donateSettings?.note}
         currency={donateSettings?.currency}
         suggestedAmounts={donateSettings?.suggestedAmounts}
-      />
+      /> */}
 
       <SiteFooter
         siteName={siteSettings?.siteName}
